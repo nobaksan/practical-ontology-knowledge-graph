@@ -1,0 +1,11 @@
+PREFIX : <https://company.internal/ontology/manufacturing#>
+
+SELECT ?equipment ?eqName ?lineName
+WHERE {
+  ?equipment a :AssemblyEquipment ;
+             :hasName ?eqName ;
+             :installedIn ?line .
+             
+  ?line :belongsTo :Factory_Seoul ;
+        :hasName ?lineName .
+}

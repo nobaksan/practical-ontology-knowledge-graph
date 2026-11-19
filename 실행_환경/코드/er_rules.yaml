@@ -1,0 +1,23 @@
+version: "1.2.0"
+target_entity: "Organization"
+
+blocking_strategy:
+  - field: "biz_no"
+    method: "prefix_3"  # 사업자등록번호 앞 3자리 블로킹
+
+comparison_features:
+  - field: "biz_no"
+    algorithm: "exact_match_normalized"
+    weight: 0.50
+  - field: "name"
+    algorithm: "jaro_winkler"
+    threshold: 0.82
+    weight: 0.35
+  - field: "city_or_address"
+    algorithm: "token_containment"
+    weight: 0.15
+
+thresholds:
+  auto_merge: 0.85      # 0.85 이상: 머신 자동 결합
+  human_review: 0.65    # 0.65 ~ 0.85: HITL 검토 큐 배정
+  disjoint: 0.65        # 0.65 미만: 독립 개체 유지

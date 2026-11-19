@@ -1,0 +1,30 @@
+
+### 2026년 3월 매출 상위 3개 고객은 어디야?
+(12.5초)
+답: This query calculates total sales revenue per customer for March 2026 by joining sales orders (so_hdr) with order details (so_dtl) and customer master (cust_mst), filtering out cancelled orders (so_stat <> '90') and orders within the March 2026 date range. It groups results by customer name and orders them by descending total sales, returning the top 3 customers with the highest sales amounts.
+SQL:
+SELECT c.cust_nm AS customer_name, SUM(d.amt) AS total_sales FROM factory.erp.so_hdr h JOIN factory.erp.so_dtl d ON d.so_no = h.so_no JOIN factory.erp.cust_mst c ON c.cust_cd = h.cust_cd WHERE h.so_dt >= '2026-03-01' AND h.so_dt < '2026-04-01' AND h.so_stat <> '90' GROUP BY c.cust_nm ORDER BY total_sales DESC LIMIT 3;
+행: ["[{\"customer_name\":\"\\ub098\\ub798\\ubaa8\\ube4c\\ub9ac\\ud2f0\",\"total_sales\":1611767000.0},{\"customer_name\":\"\\ubcf4\\ub78c\\ud30c\\uc6cc\",\"total_sales\":1485950800.0},{\"customer_name\":\"\\uc138\\uc6c0\\uc790\\ub3d9\\ucc28\",\"total_sales\":1341006800.0}]"]
+
+### 공장별 검사 불량률을 알려줘
+(16.4초)
+답: This query calculates the inspection defect rate per factory by joining inspection records (qms.insp) through the production path (lot → wo → line) to the plant table. It sums the defective units (dfct_qty) and sampled units (smpl_qty) for each factory, casts the totals to REAL before dividing to preserve fractional precision, and groups the results by plant code and name, ordering by plant code.
+SQL:
+SELECT p.plant_cd, p.plant_nm, CAST(SUM(i.dfct_qty) AS REAL) / CAST(SUM(i.smpl_qty) AS REAL) AS defect_rate FROM factory.qms.insp i JOIN factory.mes.lot l ON l.lot_no = i.lot_no JOIN factory.mes.wo w ON w.wo_no = l.wo_no JOIN factory.mes.line ln ON ln.line_cd = w.line_cd JOIN factory.mes.plant p ON p.plant_cd = ln.plant_cd GROUP BY p.plant_cd, p.plant_nm ORDER BY p.plant_cd;
+행: ["[{\"plant_cd\":\"GUM1\",\"plant_nm\":\"\\uad6c\\ubbf8 1\\uacf5\\uc7a5\",\"defect_rate\":0.02259989},{\"plant_cd\":\"HWS2\",\"plant_nm\":\"\\ud654\\uc131 2\\uacf5\\uc7a5\",\"defect_rate\":0.0228781},{\"plant_cd\":\"ULS1\",\"plant_nm\":\"\\uc6b8\\uc0b0 1\\uacf5\\uc7a5\",\"defect_rate\":0.021206327}]"]
+
+### 입고 로트 RL-2026-0102가 들어간 제품을 출하받은 고객은 어디야?
+(36.0초)
+답: This query finds customers who received products associated with incoming lot RL-2026-0102. It starts from the rcv_lot table filtered by the specific lot number, then traces through item_mst to identify the products, follows the sales order path through so_dtl and so_hdr, and finally joins to cust_mst to retrieve customer identifiers and names. The result shows which customers received products from this incoming lot.
+SQL:
+SELECT c.cust_cd, c.cust_nm FROM factory.qms.rcv_lot rl JOIN factory.erp.item_mst im ON rl.item_cd = im.item_cd JOIN factory.erp.so_dtl sd ON im.item_cd = sd.item_cd JOIN factory.erp.so_hdr h ON sd.so_no = h.so_no JOIN factory.erp.cust_mst c ON h.cust_cd = c.cust_cd WHERE rl.rcv_lot_no = 'RL-2026-0102';
+행: ["[]"]
+
+### 2026년 3월 공장별 탄소 배출량은 얼마야?
+(25.0초)
+답: This query attempts to list each factory plant code with a carbon emission value for March 2026, but carbon emission data is not available in the schema. The query joins factory.mes.plant with mes.lot and mes.wo to scope to March 2026 production records, yet the carbon emission metric cannot be calculated from the available tables. Per the data rules, carbon emission data does not exist for the requested period and factory grouping.
+SQL:
+SELECT p.plant_cd, NULL AS carbon_emission FROM factory.mes.plant AS p WHERE EXISTS (SELECT 1 FROM factory.mes.lot AS l WHERE l.prod_dt >= '2026-03-01' AND l.prod_dt < '2026-04-01' AND l.wo_no IN (SELECT wo_no FROM factory.mes.wo WHERE st_dt >= '2026-03-01' AND st_dt < '2026-04-01')) GROUP BY p.plant_cd ORDER BY p.plant_cd;
+행: ["[{\"plant_cd\":\"GUM1\",\"carbon_emission\":null},{\"plant_cd\":\"HWS2\",\"carbon_emission\":null},{\"plant_cd\":\"ULS1\",\"carbon_emission\":null}]"]
+
+[저장] 실행_환경/실습/결과/12장_질의_4차_검토후.json

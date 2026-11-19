@@ -1,0 +1,5 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ont:  <https://company.internal/ontology/manufacturing#> .
+@prefix data: <https://company.internal/resource/> .
+
+data:eq_robot01  ont:installedIn  data:line_assembly_A .

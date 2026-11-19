@@ -1,0 +1,9 @@
+# schemas/links/OrderFulfillment.yaml
+link_type: OrderFulfillment
+source_type: Order
+target_type: WorkOrder
+cardinality: ONE_TO_MANY
+
+display_names:
+  forward: "이행 작업지시 목록 (Work Orders)"
+  reverse: "원천 수주 주문 (Parent Order)"

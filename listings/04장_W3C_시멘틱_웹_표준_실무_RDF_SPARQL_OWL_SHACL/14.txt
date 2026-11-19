@@ -1,0 +1,5 @@
+[라인이 없는 설비 (FILTER NOT EXISTS 로 직접 찾아야 보인다)] 1행
+  eq_press02
+추론기가 남긴 오류 메시지: 0건
+대조: sameAs 와 differentFrom 을 함께 선언하면 오류 4건
+  'sameAs' and 'differentFrom' cannot be used on the same subject-object pair

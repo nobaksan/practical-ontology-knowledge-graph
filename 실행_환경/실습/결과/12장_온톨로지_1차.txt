@@ -1,0 +1,27 @@
+# 용어 17개
+- Common Code: A master table defining categorical codes, group classifications, and multilingu
+- Customer: Customer master record
+- Equipment: Core equipment entity capturing identification, naming, classification, and inst
+- Inspection: Quality inspection records
+- Inspection Defect: Core defect tracking fields for inspection records
+- Item Master: Core master table for inventory/product items.
+- Lot Component: Tracks received lot identifiers and their consumed/used quantities.
+- Plant: Core manufacturing plant entity
+- Process Timing: Captures runtime and duration metrics for workflow steps
+- Production Line: (설명 없음)
+- Production Lot: Represents a specific production batch with its identifier, quantity, and manufa
+- Receiving Lot: (설명 없음)
+- Sales Order: Represents a sales order header record containing all core order information.
+- Sales Order Line Item: Line-level details for a sales order, capturing quantity, pricing, and totals.
+- Shipment: (설명 없음)
+- Vendor: Core vendor master data entity
+- Work Order: Represents a work order entity tracking production jobs, quantities, status, and
+
+# 용어 사이 의미 경로 (홉 단위)
+Receiving Lot → Lot Component: 경로 없음
+Lot Component → Production Lot: Lot Component -REPRESENTS-> lot_comp | lot_comp -CONTAINS-> lot_no | lot_no -SEMANTIC_FK-> Lot Number | Lot Number -PROPERTY_OF-> Production Lot
+Production Lot → Shipment: 경로 없음
+Shipment → Sales Order: Shipment -REPRESENTS-> ship | ship -CONTAINS-> so_no | so_no -SEMANTIC_FK-> Sales Order Number | Sales Order Number -PROPERTY_OF-> Sales Order
+Sales Order → Customer: Sales Order -REPRESENTS-> so_hdr | so_hdr -CONTAINS-> cust_cd | cust_cd -SEMANTIC_FK-> Customer Code | Customer Code -PROPERTY_OF-> Customer
+Receiving Lot → Customer: 경로 없음
+Inspection → Plant: 경로 없음

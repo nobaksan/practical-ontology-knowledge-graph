@@ -1,0 +1,30 @@
+
+### 2026년 3월 매출 상위 3개 고객은 어디야?
+(13.0초)
+답: This query finds the top 3 customers by order count in March 2026. It joins the customer master table with sales orders on the customer ID, filters for orders with requested delivery dates in March 2026, groups by customer name, counts the number of orders per customer, and returns the top 3 customers with the highest order counts.
+SQL:
+SELECT c.cust_nm, COUNT(s.so_no) AS order_count FROM factory.erp.cust_mst AS c JOIN factory.erp.so_hdr AS s ON c.cust_cd = s.cust_cd WHERE s.req_dlv_dt >= '2026-03-01' AND s.req_dlv_dt < '2026-04-01' GROUP BY c.cust_nm ORDER BY order_count DESC LIMIT 3;
+행: ["[{\"cust_nm\":\"\\ud55c\\ube5b\\ubaa8\\ud130\\uc2a4\",\"order_count\":13},{\"cust_nm\":\"\\ub098\\ub798\\ubaa8\\ube4c\\ub9ac\\ud2f0\",\"order_count\":13},{\"cust_nm\":\"\\uc0c8\\uc194\\uc804\\uae30\",\"order_count\":12}]"]
+
+### 공장별 검사 불량률을 알려줘
+(12.3초)
+답: This query calculates the inspection defect rate as a percentage per inspection record from the factory.qms.insp table. It sums the defective units (dfct_qty) and sampled units (smpl_qty) for each inspection, divides them as a real-number ratio, and multiplies by 100 to express the result as a percentage. The results are grouped by inspection number (insp_no) and ordered from highest to lowest defect rate.
+SQL:
+SELECT insp_no, CAST(SUM(dfct_qty) AS REAL) / CAST(SUM(smpl_qty) AS REAL) * 100 AS defect_rate FROM factory.qms.insp GROUP BY insp_no ORDER BY defect_rate DESC;
+행: ["[{\"insp_no\":\"IN00000624\",\"defect_rate\":100.0},{\"insp_no\":\"IN00000059\",\"defect_rate\":100.0},{\"insp_no\":\"IN00000272\",\"defect_rate\":100.0},{\"insp_no\":\"IN00000078\",\"defect_rate\":100.0},{\"insp_no\":\"IN00000790\",\"defect_rate\":80.0000011921},{\"insp_no\":\"IN00000579\",\"defect_rate\":80.0000011921},{\"insp_no\":\"IN00000573\",\"defect_rate\":80.0000011921},{\"insp_no\":\"IN00000720\",\"defect_rate\":80.0000011921},{\"insp_no\":\"IN00000857\",\"defect_rate\":80.0000011921},{\"insp_no\":\"IN00000016\",\"defect_rate\":75.0},{\"insp_no\":\"IN00000655\",\"defect_rate\":62.5},{\"insp_no\":\"IN00000711\",\"defect_rate\":62.5},{\"insp_no\":\"IN00001024\",\"defect_rate\":60.0000023842},{\"insp_no\":\"IN00000773\",\"defect_rate\":60.0000023842},{\"insp_no\":\"IN00000737\",\"
+
+### 입고 로트 RL-2026-0102가 들어간 제품을 출하받은 고객은 어디야?
+(24.0초)
+답: This query finds customers who received products with incoming lot RL-2026-0102 by tracing the chain from the receiving lot through item master to sales order details, header, and finally to the customer master table. It joins factory.qms.rcv_lot to factory.erp.item_mst on item_cd, then to factory.erp.so_dtl on item_cd, then to factory.erp.so_hdr on so_no, and finally to factory.erp.cust_mst on cust_cd, filtering for the specific lot number RL-2026-0102 and returning the distinct customer codes.
+SQL:
+SELECT DISTINCT c.cust_cd FROM factory.qms.rcv_lot AS r JOIN factory.erp.item_mst AS i ON r.item_cd = i.item_cd JOIN factory.erp.so_dtl AS s ON i.item_cd = s.item_cd JOIN factory.erp.so_hdr AS h ON s.so_no = h.so_no JOIN factory.erp.cust_mst AS c ON h.cust_cd = c.cust_cd WHERE r.rcv_lot_no = 'RL-2026-0102';
+행: ["[]"]
+
+### 2026년 3월 공장별 탄소 배출량은 얼마야?
+(77.0초)
+답: This query calculates total production quantity per factory (plant) for March 2026. It starts from the production lot table and joins through work order, production line, and plant to attribute each lot to a plant code. The prod_dt filter restricts to March 2026 records, and the sum of prod_qty aggregates production volume per plant. Results are grouped by plant code and ordered alphabetically.
+SQL:
+SELECT plant.plant_cd AS factory_code, SUM(lot.prod_qty) AS total_production_qty FROM factory.mes.lot AS lot INNER JOIN factory.mes.wo AS wo ON lot.wo_no = wo.wo_no INNER JOIN factory.mes.line AS line ON wo.line_cd = line.line_cd INNER JOIN factory.mes.plant AS plant ON line.plant_cd = plant.plant_cd WHERE lot.prod_dt >= '2026-03-01' AND lot.prod_dt <= '2026-03-31' GROUP BY plant.plant_cd ORDER BY plant.plant_cd;
+행: ["[{\"factory_code\":\"GUM1\",\"total_production_qty\":27330},{\"factory_code\":\"HWS2\",\"total_production_qty\":29323},{\"factory_code\":\"ULS1\",\"total_production_qty\":34212}]"]
+
+[저장] 실행_환경/실습/결과/12장_질의_3차_검토전.json

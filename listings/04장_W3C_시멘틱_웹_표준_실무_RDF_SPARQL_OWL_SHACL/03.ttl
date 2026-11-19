@@ -1,0 +1,4 @@
+<< :eq_robot01 :installedIn :line_assembly_A >> 
+    :installedDate "2026-03-01"^^xsd:date ;
+    :confidence    0.98 ;
+    :sourceSystem  "MES_LineLog" .

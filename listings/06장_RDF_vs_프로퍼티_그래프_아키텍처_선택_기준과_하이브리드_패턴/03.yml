@@ -1,0 +1,16 @@
+# LPG -> RDF 매핑 선언 명세 (개념적 예시)
+nodes:
+  - label: Account
+    uri_pattern: "https://bank.internal/account/{accNo}"
+    target_class: "ont:Account"
+    properties:
+      bank: "ont:bankName"
+
+edges:
+  - type: TRANSFERS
+    strategy: "reification"  # 엣지 속성 존재로 인한 중간 개체 전개 전략
+    intermediate_class: "ont:TransferEvent"
+    uri_pattern: "https://bank.internal/tx/{_id}"
+    properties:
+      amount: "ont:amount"
+      timestamp: "ont:timestamp"

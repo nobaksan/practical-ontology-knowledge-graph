@@ -1,0 +1,54 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix :     <https://company.internal/ontology/manufacturing#> .
+
+# ── TBox: 어휘와 공리 ──────────────────────────────
+:Equipment          a owl:Class .
+:AssemblyEquipment  a owl:Class ; rdfs:subClassOf :Equipment .
+:PressEquipment     a owl:Class ; rdfs:subClassOf :Equipment .
+:CncEquipment       a owl:Class ; rdfs:subClassOf :Equipment .
+:Line               a owl:Class .
+:Factory            a owl:Class .
+:Corporation        a owl:Class .
+
+:installedIn  a owl:ObjectProperty ; owl:inverseOf :hasEquipment .
+:belongsTo    a owl:ObjectProperty .
+:ownedBy      a owl:ObjectProperty .
+:partOf       a owl:ObjectProperty , owl:TransitiveProperty .
+:hasName      a owl:DatatypeProperty .
+
+# 4.3.3 의 주장을 확인하려고 OWL 카디널리티도 걸어 둔다: "설비는 라인을 1개 이상 가진다"
+:Equipment rdfs:subClassOf [ a owl:Restriction ;
+    owl:onProperty :installedIn ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] .
+
+# ── ABox: 사실 ────────────────────────────────────
+:HanbitCorp           a :Corporation ; :hasName "한빛제조(주)" .
+:Factory_Seoul    a :Factory ; :hasName "서울 공장" ; :ownedBy :HanbitCorp .
+:Factory_Ulsan    a :Factory ; :hasName "울산 공장" ; :ownedBy :HanbitCorp .
+
+:line_assembly_A  a :Line ; :hasName "조립 A 라인" ; :belongsTo :Factory_Seoul .
+:line_assembly_B  a :Line ; :hasName "조립 B 라인" ; :belongsTo :Factory_Seoul .
+:line_press_U1    a :Line ; :hasName "프레스 U1 라인" ; :belongsTo :Factory_Ulsan .
+
+:eq_robot01  a :AssemblyEquipment ; :hasName "Robot-01" ; rdfs:label "조립 로봇 1호기" ;
+             :installedIn :line_assembly_A .
+:eq_robot02  a :AssemblyEquipment ; :hasName "Robot-02" ; rdfs:label "조립 로봇 2호기" ;
+             :installedIn :line_assembly_B .
+:eq_press01  a :PressEquipment ; :hasName "Press-01" ; rdfs:label "유압 프레스 1호기" ;
+             :installedIn :line_press_U1 .
+
+# 결함 데이터 두 건: 라인 정보 누락, 라인 자리에 공장을 넣음
+:eq_press02  a :PressEquipment ; :hasName "Press-02" ; rdfs:label "유압 프레스 2호기" .
+:eq_cnc03    a :CncEquipment ; :hasName "CNC-03" ; rdfs:label "CNC 선반 3호기" ;
+             :installedIn :Factory_Seoul .
+
+# 부품 소속(전이성 확인용): 센서 → 로봇 → 라인
+:sensor01    :partOf :eq_robot01 .
+:eq_robot01  :partOf :line_assembly_A .
+
+# 같은 설비를 ERP 와 MES 가 따로 부르는 경우(동등성 확인용)
+:eq_erp_101  :assetNo "FA-2023-0101" ; :acquiredCost 182000000 .
+:eq_mes_909  :sensorTag "MES-909-TEMP" ; :lastTemp 71.4 .
+:eq_erp_101  owl:sameAs :eq_mes_909 .

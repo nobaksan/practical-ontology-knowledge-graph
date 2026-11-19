@@ -1,0 +1,12 @@
+[서울 공장 조립 설비] 2행
+  eq_robot01 | Robot-01 | 조립 A 라인
+  eq_robot02 | Robot-02 | 조립 B 라인
+
+[설비 → 라인 → 공장 → 법인 순차 경로] 3행
+  eq_press01 | HanbitCorp
+  eq_robot01 | HanbitCorp
+  eq_robot02 | HanbitCorp
+
+[센서의 모든 상위 소속 (partOf+)] 2행
+  eq_robot01
+  line_assembly_A

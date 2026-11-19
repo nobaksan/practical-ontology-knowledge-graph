@@ -1,0 +1,20 @@
+[ a sh:ValidationReport ;
+  sh:conforms false ;
+  sh:result [
+    a sh:ValidationResult ;
+    sh:resultSeverity sh:Violation ;
+    sh:focusNode :eq_press02 ;
+    sh:resultPath :installedIn ;
+    sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+    sh:resultMessage "모든 설비는 정확히 1개의 유효 라인 인스턴스에 설치되어야 함" ;
+  ] ;
+  sh:result [
+    a sh:ValidationResult ;
+    sh:resultSeverity sh:Violation ;
+    sh:focusNode :eq_cnc03 ;
+    sh:resultPath :installedIn ;
+    sh:value :Factory_Seoul ;
+    sh:sourceConstraintComponent sh:ClassConstraintComponent ;
+    sh:resultMessage "목적어 노드가 Line 클래스 인스턴스가 아닙니다." ;
+  ]
+] .

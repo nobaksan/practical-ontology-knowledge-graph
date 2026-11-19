@@ -1,0 +1,4 @@
+# 결함 데이터 두 건: 라인 정보 누락, 라인 자리에 공장을 넣음
+:eq_press02  a :PressEquipment ; :hasName "Press-02" ; rdfs:label "유압 프레스 2호기" .
+:eq_cnc03    a :CncEquipment ; :hasName "CNC-03" ; rdfs:label "CNC 선반 3호기" ;
+             :installedIn :Factory_Seoul .

@@ -1,0 +1,18 @@
+[용어] 17개 테이블에 대응하는 용어를 찾았다
+  so_hdr     → Sales Order 인증
+  so_dtl     → Sales Order Line (원래 'Sales Order Detail') 인증
+  cust_mst   → Customer (원래 'Customer Master') 인증
+  ship       → Shipment 인증
+  lot        → Production Lot (원래 'Lot') 인증
+  lot_comp   → Lot Component (원래 'Lot Completion') 인증
+  rcv_lot    → Receiving Lot 인증
+  insp       → Inspection (원래 'Insp') 인증
+  insp_dfct  → Inspection Defect (원래 'Defective Item Count') 인증
+  wo         → Work Order 인증
+  wo_eq      → Work Order Equipment 인증
+  line       → Production Line 인증
+  plant      → Plant 인증
+[SQL 속성] Net Revenue → 용어 'Sales Order' 에 등록·인증
+[SQL 속성] Inspection Plant → 용어 'Inspection' 에 등록·인증
+[SQL 속성] Shipped Customers → 용어 'Receiving Lot' 에 등록·인증
+[지시문] 업무 규칙 5줄 등록

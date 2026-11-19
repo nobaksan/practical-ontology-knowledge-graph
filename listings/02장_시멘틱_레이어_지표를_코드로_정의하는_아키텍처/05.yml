@@ -1,0 +1,10 @@
+# 지표 정의 파일에 거버넌스 메타데이터를 직접 박제하는 스펙
+metrics:
+  - name: recognized_revenue
+    label: "공인 인식 매출"
+    owner: finance_revenue_team            # 지표의 절대적 단일 소유 부서
+    approvers:                             # 수식 변경 시 반드시 승인해야 할 필수 결재선
+      - finance_director
+      - internal_audit_lead
+    changelog_required: true               # 변경 사유 문서화 강제
+    frozen_after: "2026-01-01"             # 회계 마감 이후 과거 데이터의 소급 수식 변경 원천 차단

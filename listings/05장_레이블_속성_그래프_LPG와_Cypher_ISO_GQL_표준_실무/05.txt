@@ -1,0 +1,7 @@
+적재: 노드 60,000 · 관계 240,000
+MERGE 1회차: 노드 60,002 · 관계 240,001 · 해당 이체 1건 · retryCount=None
+MERGE 2회차: 노드 60,002 · 관계 240,001 · 해당 이체 1건 · retryCount=1
+MERGE 3회차: 노드 60,002 · 관계 240,001 · 해당 이체 1건 · retryCount=2
+CREATE 1회차: 같은 번호 계좌 노드 1개
+CREATE 2회차: 실패 — Neo.ClientError.Schema.ConstraintValidationFailed
+  Node(360030) already exists with label `Account` and property `accNo` = '110-999'

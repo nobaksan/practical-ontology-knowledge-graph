@@ -1,0 +1,24 @@
+
+### 2026년 3월 매출 상위 3개 고객은 어디야?
+(662.6초)
+답: This query identifies the top 3 customers by sales volume in March 2026. It filters sales orders from the `factory.erp.so_hdr` table to the calendar month of March 2026, joins each order to its corresponding customer via the `cust_cd` foreign key in `factory.erp.cust_mst`, counts the number of orders per customer, and returns the three customers with the highest order counts, displayed with their business names.
+SQL:
+SELECT c.cust_nm, COUNT(s.so_no) AS total_sales FROM factory.erp.so_hdr s JOIN factory.erp.cust_mst c ON s.cust_cd = c.cust_cd WHERE s.so_dt >= '2026-03-01' AND s.so_dt < '2026-04-01' GROUP BY c.cust_nm ORDER BY total_sales DESC LIMIT 3;
+행: ["[{\"cust_nm\":\"\\uc138\\uc6c0\\uc790\\ub3d9\\ucc28\",\"total_sales\":14},{\"cust_nm\":\"\\ud558\\ub298\\ubc30\\ud130\\ub9ac\",\"total_sales\":11},{\"cust_nm\":\"\\ubcf4\\ub78c\\ud30c\\uc6cc\",\"total_sales\":11}]"]
+
+### 공장별 검사 불량률을 알려줘
+(685.3초)
+답: This calculates the overall inspection defect rate by dividing the total count of defects (SUM dfct_qty) by the total number of inspected units (SUM smpl_qty) across all records, then multiplying by 100 to express as a percentage. The rate is derived by joining the inspection defect classification table (factory.qms.insp_dfct) with the main inspection record table (factory.qms.insp) on the inspection number (insp_no). Since the available schema contains no factory identifier column for grouping, the result represents the aggregate defect rate across all inspections.
+SQL:
+SELECT CAST(SUM(d.dfct_qty) AS REAL) / SUM(i.smpl_qty) * 100 AS defect_rate FROM factory.qms.insp_dfct d JOIN factory.qms.insp i ON d.insp_no = i.insp_no
+행: ["[{\"defect_rate\":11.958241063}]"]
+
+### 입고 로트 RL-2026-0102가 들어간 제품을 출하받은 고객은 어디야?
+(1306.9초)
+답: LLM failed to produce a response.
+
+### 2026년 3월 공장별 탄소 배출량은 얼마야?
+(1635.8초)
+답: LLM failed to produce a response.
+
+[저장] 실행_환경/실습/결과/12장_질의_1차.json

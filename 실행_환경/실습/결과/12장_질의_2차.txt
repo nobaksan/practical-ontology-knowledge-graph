@@ -1,0 +1,27 @@
+
+### 2026년 3월 매출 상위 3개 고객은 어디야?
+(15.6초)
+답: This query finds the top 3 customers by sales (order count) in March 2026. It joins the sales order header with the customer master table on the customer code, filters for orders placed between March 1 and March 31, 2026, groups the results by customer name, counts the number of sales orders per customer, and returns the top 3 customers ranked by total order count, with ties broken alphabetically by customer name.
+SQL:
+SELECT c.cust_nm, COUNT(s.so_no) AS total_sales FROM factory.erp.so_hdr AS s JOIN factory.erp.cust_mst AS c ON s.cust_cd = c.cust_cd WHERE s.so_dt >= '2026-03-01' AND s.so_dt < '2026-04-01' GROUP BY c.cust_nm ORDER BY total_sales DESC, c.cust_nm ASC LIMIT 3;
+행: ["[{\"cust_nm\":\"\\uc138\\uc6c0\\uc790\\ub3d9\\ucc28\",\"total_sales\":14},{\"cust_nm\":\"\\ubcf4\\ub78c\\ud30c\\uc6cc\",\"total_sales\":11},{\"cust_nm\":\"\\ud558\\ub298\\ubc30\\ud130\\ub9ac\",\"total_sales\":11}]"]
+
+### 공장별 검사 불량률을 알려줘
+(20.6초)
+답: This calculates the inspection defect rate (ratio of total defective units to total inspected units) by lot number across all inspection records. It sums the defect quantities and sample quantities from the inspection table, then divides to get the rate, grouping by lot number to show variation across different production batches, and orders the results by defect rate from highest to lowest.
+SQL:
+SELECT insp.lot_no, SUM(insp.dfct_qty) AS total_defects, SUM(insp.smpl_qty) AS total_inspected, CAST(SUM(insp.dfct_qty) AS REAL) / NULLIF(SUM(insp.smpl_qty), 0) AS defect_rate FROM factory.qms.insp insp GROUP BY insp.lot_no ORDER BY defect_rate DESC
+행: ["[{\"lot_no\":\"LT00000078\",\"total_defects\":2,\"total_inspected\":2,\"defect_rate\":1.0},{\"lot_no\":\"LT00000059\",\"total_defects\":4,\"total_inspected\":4,\"defect_rate\":1.0},{\"lot_no\":\"LT00000272\",\"total_defects\":2,\"total_inspected\":2,\"defect_rate\":1.0},{\"lot_no\":\"LT00000624\",\"total_defects\":2,\"total_inspected\":2,\"defect_rate\":1.0},{\"lot_no\":\"LT00000790\",\"total_defects\":4,\"total_inspected\":5,\"defect_rate\":0.8},{\"lot_no\":\"LT00000720\",\"total_defects\":4,\"total_inspected\":5,\"defect_rate\":0.8},{\"lot_no\":\"LT00000573\",\"total_defects\":4,\"total_inspected\":5,\"defect_rate\":0.8},{\"lot_no\":\"LT00000857\",\"total_defects\":4,\"total_inspected\":5,\"defect_rate\":0.8},{\"lot_no\":\"LT00000579\",\"total_defects\":4,\"total_inspected\":5,\"defect
+
+### 입고 로트 RL-2026-0102가 들어간 제품을 출하받은 고객은 어디야?
+(703.5초)
+답: SQL can't be constructed from the data.
+
+### 2026년 3월 공장별 탄소 배출량은 얼마야?
+(34.3초)
+답: This query calculates total production quantity per factory for March 2026 by joining production lots (lot) through work orders (wo), production lines (line), and plant identifiers (plant). It filters production dates to the calendar month of March 2026 and groups the results by plant code and name, summing the per-lot production quantities. Note that carbon emission data is not available in the schema; total_produced_qty serves as the best available proxy for factory-level activity during the specified period.
+SQL:
+SELECT p.plant_cd, p.plant_nm, SUM(l.prod_qty) AS total_produced_qty FROM factory.mes.lot AS l JOIN factory.mes.wo AS w ON l.wo_no = w.wo_no JOIN factory.mes.line AS ln ON w.line_cd = ln.line_cd JOIN factory.mes.plant AS p ON ln.plant_cd = p.plant_cd WHERE l.prod_dt BETWEEN '2026-03-01' AND '2026-03-31' GROUP BY p.plant_cd, p.plant_nm ORDER BY p.plant_cd;
+행: ["[{\"plant_cd\":\"GUM1\",\"plant_nm\":\"\\uad6c\\ubbf8 1\\uacf5\\uc7a5\",\"total_produced_qty\":27330},{\"plant_cd\":\"HWS2\",\"plant_nm\":\"\\ud654\\uc131 2\\uacf5\\uc7a5\",\"total_produced_qty\":29323},{\"plant_cd\":\"ULS1\",\"plant_nm\":\"\\uc6b8\\uc0b0 1\\uacf5\\uc7a5\",\"total_produced_qty\":34212}]"]
+
+[저장] 실행_환경/실습/결과/12장_질의_2차.json

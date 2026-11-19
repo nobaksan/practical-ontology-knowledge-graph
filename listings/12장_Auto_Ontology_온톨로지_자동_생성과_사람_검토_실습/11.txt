@@ -1,0 +1,6 @@
+이 공장 데이터베이스의 업무 규칙:
+- 매출은 erp.so_dtl.amt 의 합계다. 수주 취소(erp.so_hdr.so_stat = '90')는 매출에서 뺀다. 주문 건수를 매출로 쓰지 않는다.
+- 공장별 지표는 검사(qms.insp) → 생산 로트(mes.lot) → 작업 지시(mes.wo) → 라인(mes.line) → 공장(mes.plant)으로 잇는다.
+- 불량률은 SUM(qms.insp.dfct_qty) / SUM(qms.insp.smpl_qty) 이다. qms.insp_dfct 와 조인하면 샘플 수량이 중복되므로 쓰지 않는다.
+- 리콜 역추적은 qms.rcv_lot → mes.lot_comp → mes.lot → erp.ship → erp.so_hdr → erp.cust_mst 로 잇는다.
+- 질문한 지표가 데이터에 없으면(예: 탄소 배출량, 전력 사용량) 다른 지표로 대신 계산하지 말고 데이터에 없다고 답한다.

@@ -1,0 +1,6 @@
+neo4j==6.4.1
+owlrl==7.6.2
+psycopg==3.3.8
+psycopg-binary==3.3.8
+pyshacl==0.40.2
+rdflib==7.6.0

@@ -1,0 +1,55 @@
+--- a/auto_ontology/utils/llm_invoke.py	2026-11-08 23:43:47
++++ b/auto_ontology/utils/llm_invoke.py	2026-11-08 23:43:47
+@@ -209,6 +209,20 @@
+ _NON_REASONING_BASE_URL = resolve("NON_REASONING", "ENDPOINT")
+ _NON_REASONING_MODEL_NAME = resolve("NON_REASONING", "MODEL")
+ _NON_REASONING_API_KEY = resolve("NON_REASONING", "API_KEY")
++
++
++def _extra_kwargs(name: str) -> dict:
++    """Extra request-body fields for ChatNVIDIA, read as JSON from env *name*.
++
++    Book-lab patch: the hosted endpoint rejects nvext.guided_json, so structured
++    output falls through to response_format, where a thinking model can spend the
++    whole max_tokens budget on reasoning and return empty content. This lets
++    .env pass e.g. {"chat_template_kwargs": {"enable_thinking": false}}.
++    """
++    import json as _json
++
++    raw = os.environ.get(name, "").strip()
++    return _json.loads(raw) if raw else {}
+ 
+ 
+ def _build_client(
+@@ -218,6 +232,7 @@
+     base_url: str,
+     temperature: float,
+     max_tokens: int,
++    model_kwargs: dict | None = None,
+ ) -> BaseChatModel:
+     """Build a chat client for the given model/endpoint.
+ 
+@@ -249,6 +264,7 @@
+         base_url=base_url,
+         temperature=temperature,
+         max_tokens=max_tokens,
++        model_kwargs=model_kwargs or {},
+     )
+     client._client.get_session_fn = lambda: _TimeoutSession(LLM_INVOKE_TIMEOUT_S)
+     return client
+@@ -276,6 +292,7 @@
+         base_url=_BASE_URL,
+         temperature=temperature,
+         max_tokens=max_tokens,
++        model_kwargs=_extra_kwargs("REASONING_MODEL_KWARGS"),
+     )
+ 
+ 
+@@ -305,6 +322,7 @@
+         base_url=_NON_REASONING_BASE_URL,
+         temperature=temperature,
+         max_tokens=max_tokens,
++        model_kwargs=_extra_kwargs("NON_REASONING_MODEL_KWARGS"),
+     )
+     _remember_non_reasoning(client)
+     return client

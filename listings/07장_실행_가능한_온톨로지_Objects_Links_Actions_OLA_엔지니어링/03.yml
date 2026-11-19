@@ -1,0 +1,42 @@
+# actions/reassignWorkOrder.yaml
+action_type: reassignWorkOrder
+description: "설비 장애 또는 작업 지연 시 미완료 작업 지시를 다른 생산팀으로 긴급 재배정한다."
+
+parameters:
+  work_order:
+    type: ObjectRef(WorkOrder)
+    required: true
+    description: "재배정할 대상 작업 지시 객체"
+  target_team:
+    type: ObjectRef(Team)
+    required: true
+    description: "새롭게 인계받을 생산팀 객체"
+  reassign_reason:
+    type: STRING
+    required: true
+    description: "재배정 사유 (감사 추적용 필수 입력)"
+
+validation_rules:
+  - condition: "work_order.status NOT IN ['COMPLETED', 'CANCELLED']"
+    error_message: "이미 완료되거나 취소된 작업 지시는 재배정 불가"
+  - condition: "work_order.assigned_team_id != target_team.id"
+    error_message: "현재 배정된 팀과 동일한 팀으로 재배정 불가"
+
+mutations:
+  - update: work_order
+    set:
+      assigned_team_id: target_team.id
+      last_reassigned_at: NOW()
+
+side_effects:
+  - notify_slack:
+      channel: target_team.slack_channel
+      template: "NEW_WORK_ORDER_DISPATCHED"
+  - emit_webhook:
+      endpoint: "https://erp.internal/api/orders/reassign"
+      timeout_ms: 3000
+
+permissions:
+  allowed_roles:
+    - PRODUCTION_LEAD
+    - AUTHORIZED_DISPATCH_AGENT

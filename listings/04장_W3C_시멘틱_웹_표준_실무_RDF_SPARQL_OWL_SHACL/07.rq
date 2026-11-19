@@ -1,0 +1,10 @@
+SELECT ?eqName ?chemName
+WHERE {
+  ?eq :hasName ?eqName ;
+      :usesChemicalId ?chemId .
+  
+  # 유럽 생물정보학 연구소의 ChEMBL 공개 엔드포인트 원격 결합
+  SERVICE <https://www.ebi.ac.uk/rdf/services/sparql> {
+    ?chemId rdfs:label ?chemName .
+  }
+}

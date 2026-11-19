@@ -1,0 +1,15 @@
+[] a sh:ValidationReport ;
+    sh:conforms false ;
+    sh:result [ a sh:ValidationResult ;
+            sh:focusNode ont:eq_press02 ;
+            sh:resultMessage "모든 설비는 정확히 1개의 유효 라인 인스턴스에 설치되어야 함" ;
+            sh:resultPath ont:installedIn ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ],
+        [ a sh:ValidationResult ;
+            sh:focusNode ont:eq_cnc03 ;
+            sh:resultMessage "모든 설비는 정확히 1개의 유효 라인 인스턴스에 설치되어야 함" ;
+            sh:resultPath ont:installedIn ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:ClassConstraintComponent ;
+            sh:value ont:Factory_Seoul ] .

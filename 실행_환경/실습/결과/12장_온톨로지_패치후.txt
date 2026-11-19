@@ -1,0 +1,31 @@
+# 테이블 → 생성된 용어 (17개)
+- cmn_cd     Code Grouping: Categorical groupings representing business units, defect codes, or st
+- cust_mst   Customer Master: Core customer entity with identification, classification, and registra
+- equip      Equipment: Represents physical equipment units in the production environment.
+- insp       Insp: Business entity represented by table insp
+- insp_dfct  Defective Item Count: The count of defective items in a production batch.
+- item_mst   Item Master: Core product catalog data for items.
+- line       Production Line: (설명 없음)
+- lot        Lot: A production batch with its quantity and date.
+- lot_comp   Lot Completion: Tracks the quantity of units used during lot completion.
+- plant      Plant: Manufacturing facility information including location, identification,
+- rcv_lot    Receiving Lot: Tracks incoming shipment lots and quality control results.
+- ship       Shipment: A shipment record representing a dispatched order.
+- so_dtl     Sales Order Detail: Line item details for a sales order
+- so_hdr     Sales Order: A unique sales order identifier used to track individual customer orde
+- vend_mst   Vendor: Core vendor master data.
+- wo         Work Order: Tracks production activities and manufacturing progress.
+- wo_eq      Work Order Equipment: Tracks time metrics for work order equipment operations.
+
+# 용어 사이 의미 경로
+rcv_lot → lot_comp: 4홉, FK Receiving Lot Number→rcv_lot_no
+lot_comp → lot: 4홉, FK lot_no→Lot Number
+lot → ship: 경로 없음
+ship → so_hdr: 4홉, FK so_no→Sales Order Number
+so_hdr → cust_mst: 4홉, FK cust_cd→Customer ID
+rcv_lot → cust_mst: 경로 없음
+insp → lot: 경로 없음
+lot → wo: 4홉, FK wo_no→Work Order Number
+wo → line: 4홉, FK line_cd→Line Code
+line → plant: 4홉, FK plant_cd→Plant Code
+insp → plant: 경로 없음

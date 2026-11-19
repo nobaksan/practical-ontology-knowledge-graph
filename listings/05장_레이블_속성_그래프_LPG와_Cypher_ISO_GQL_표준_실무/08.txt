@@ -1,0 +1,12 @@
+허브 계좌로 들어오는 이체 200,000건
+허브에서 출발    건수 10 · db hits 4,200,004 · 중앙값  612.03ms
+고객에서 출발    건수 10 · db hits        50 · 중앙값    2.14ms
+플래너에 맡김    건수 10 · db hits 4,000,014 · 중앙값  558.83ms
+  실행 계획(아래에서 위로 실행):
+    ProduceResults
+      EagerAggregation
+        Filter
+          Expand(All)
+            Filter
+              Expand(All)
+                NodeUniqueIndexSeek

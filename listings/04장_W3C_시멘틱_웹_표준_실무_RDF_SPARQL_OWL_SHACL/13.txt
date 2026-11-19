@@ -1,0 +1,16 @@
+[추론 전: 상위 클래스 Equipment 로 찾기] 0행
+
+OWL 2 RL 물체화: 64 → 311 트리플 (+247, 51ms)
+
+[추론 후: 상위 클래스 Equipment 로 찾기] 5행
+  eq_cnc03
+  eq_press01
+  eq_press02
+  eq_robot01
+  eq_robot02
+
+[역관계: 조립 A 라인이 가진 설비 (hasEquipment 는 적재한 적 없음)] 1행
+  eq_robot01
+
+[동등성: ERP 번호로 MES 온도 읽기] 1행
+  FA-2023-0101 | 71.4

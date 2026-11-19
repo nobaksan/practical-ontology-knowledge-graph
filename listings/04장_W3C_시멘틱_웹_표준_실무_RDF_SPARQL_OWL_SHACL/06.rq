@@ -1,0 +1,2 @@
+# 부품의 모든 상위 조립체를 끝까지 재귀 추적 (1회 이상)
+?part :partOf+ ?rootAssembly .

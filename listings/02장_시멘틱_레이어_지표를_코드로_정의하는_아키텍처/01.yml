@@ -1,0 +1,50 @@
+# models/metrics/monthly_active_users.yml
+# 전사 공인 활성 사용자(MAU) 시맨틱 모델 정의
+semantic_model:
+  name: events_semantic_model
+  node_relation:
+    schema_name: analytics
+    alias: fct_events
+
+  # 1. 엔티티 정의 (조인 그래프의 접착점)
+  entities:
+    - name: user
+      expr: user_id
+      type: primary
+
+  # 2. 디멘션 정의 (분석 슬라이스 축)
+  dimensions:
+    - name: plan
+      type: categorical
+      expr: user_plan_tier
+    - name: country
+      type: categorical
+      expr: geo_country_code
+
+    # 4. 시간축 정의 (가장 중요한 시간 기준선 강제)
+    - name: event_date
+      type: time
+      type_params:
+        time_granularity: day
+      expr: CAST(event_timestamp AS DATE)
+
+  # 3. 측정값 정의 (비즈니스 집계 공식과 필터)
+  measures:
+    - name: active_users
+      description: "월간 유효 비즈니스 액션을 1회 이상 수행한 순수 활성 사용자 수"
+      agg: count_distinct
+      expr: user_id
+      agg_params:
+        distinct: true
+      # 과거 각 대시보드 SQL 안에 숨어 있던 필터 조건이 단일 코드로 승격됨
+      filter: |
+        event_name IN ('create_post', 'write_comment', 'share_content')
+        AND is_internal_account = FALSE
+
+# 지표 노출 인터페이스 (Consumers가 호출하는 공식 API 규격)
+metrics:
+  - name: monthly_active_users
+    label: "공식 MAU (Monthly Active Users)"
+    type: simple
+    type_params:
+      measure: active_users

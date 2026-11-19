@@ -1,0 +1,14 @@
+PREFIX ex: <http://enterprise.org/onto#>
+
+SELECT ?custName ?orderNo ?workOrder WHERE {
+  ?factory a ex:Factory ;
+           ex:factoryName "울산 1공장" .
+  ?machine ex:locatedIn ?factory .
+  ?wo ex:assignedTo ?machine ;
+      ex:statusCode "IN_PROGRESS" ;
+      ex:orderRef ?order .
+  ?order ex:orderNumber ?orderNo ;
+         ex:orderedBy ?customer .
+  ?customer ex:legalName ?custName .
+  BIND(STRAFTER(STR(?wo), "#") AS ?workOrder)
+}

@@ -1,0 +1,42 @@
+version: "2.1.0"
+description: "대한제조정밀 엔터프라이즈 선언적 온톨로지 매핑 정의서"
+
+mappings:
+  - source_table: "erp_customers"
+    target_class: "Organization"
+    identifier_generation:
+      rule: "hash_urn"
+      prefix: "urn:ent:org:"
+      composite_keys: ["biz_no"]
+    properties:
+      - source_column: "name"
+        target_property: "legalName"
+        data_type: "xsd:string"
+      - source_column: "biz_no"
+        target_property: "taxIdentifier"
+        data_type: "xsd:string"
+      - source_column: "address"
+        target_property: "registeredAddress"
+        data_type: "xsd:string"
+
+  - source_table: "mes_work_orders"
+    target_class: "WorkOrder"
+    identifier_generation:
+      rule: "direct_key"
+      prefix: "urn:ent:wo:"
+      source_column: "work_order"
+    properties:
+      - source_column: "product_name"
+        target_property: "targetProduct"
+        data_type: "xsd:string"
+      - source_column: "status"
+        target_property: "statusCode"
+        data_type: "xsd:string"
+    relationships:
+      - relation_type: "ASSIGNED_TO"
+        target_class: "Machine"
+        target_identifier_prefix: "urn:ent:mach:"
+        target_foreign_key: "machine_id"
+        temporal_properties:
+          valid_from: "valid_from"
+          valid_to: "valid_to"

@@ -1,0 +1,2 @@
+# 클라이언트의 선언적 API 질의 요청
+GET /api/v1/load?metrics=monthly_active_users&dimensions=plan&time_range=2026-08

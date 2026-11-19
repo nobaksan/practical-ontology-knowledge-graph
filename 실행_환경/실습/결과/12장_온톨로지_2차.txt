@@ -1,0 +1,29 @@
+# 용어 19개
+- Code: Numeric or alphanumeric codes representing identifiers like order numbers, produ
+- Code Group: Categorical grouping codes representing business units such as regions, defect c
+- Code Name: Korean-language description of workflow stages such as order receipt, production
+- Customer Master: Core customer profile and registration data.
+- Equipment: Represents individual equipment units in the production environment.
+- Insp: Insp
+- Insp Dfct: Business entity represented by table insp_dfct
+- Item Master: Core product catalog data for items.
+- Lot Component: Represents a component within a lot, tracking the quantity used.
+- Plant: Manufacturing facility information including codes, names, and geographic region
+- Production Line: A specific production line used in manufacturing operations.
+- Production Lot: A production batch record capturing quantity and date.
+- Receiving Lot: Tracks individual receiving events for inventory items.
+- Sales Order: A unique sales order identifier used to track individual customer orders.
+- Sales Order Detail: Line item details for a sales order.
+- Shipment: A record of goods dispatched from a warehouse or production facility.
+- Vendor: Core vendor master data for supplier management.
+- Wo: Business entity represented by table wo
+- Workout Exercise: Tracks running activity metrics including duration and segment breakdowns.
+
+# 용어 사이 의미 경로 (홉 단위)
+Receiving Lot → Lot Component: Receiving Lot -PROPERTY_OF-> Receiving Lot Number | Receiving Lot Number -SEMANTIC_FK-> rcv_lot_no | rcv_lot_no -CONTAINS-> lot_comp | lot_comp -REPRESENTS-> Lot Component
+Lot Component → Production Lot: Lot Component -REPRESENTS-> lot_comp | lot_comp -CONTAINS-> lot_no | lot_no -SEMANTIC_FK-> Lot Number | Lot Number -PROPERTY_OF-> Production Lot
+Production Lot → Shipment: 경로 없음
+Shipment → Sales Order: Shipment -REPRESENTS-> ship | ship -CONTAINS-> so_no | so_no -SEMANTIC_FK-> Sales Order Number | Sales Order Number -PROPERTY_OF-> Sales Order
+Sales Order → Customer: 용어 없음
+Receiving Lot → Customer: 용어 없음
+Inspection → Plant: 용어 없음

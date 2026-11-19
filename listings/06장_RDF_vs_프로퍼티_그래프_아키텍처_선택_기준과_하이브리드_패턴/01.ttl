@@ -1,0 +1,15 @@
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ont:  <https://company.internal/ontology/banking#> .
+@prefix data: <https://company.internal/resource/> .
+
+# 1. 관계 자체를 독립된 중간 이벤트 개체 노드로 생성
+data:tx_event_20260301_901 a ont:TransferEvent ;
+  ont:fromAccount data:acc_110_123 ;
+  ont:toAccount   data:acc_3333_88 ;
+  ont:amount      5000000 ;
+  ont:timestamp   "2026-03-01T02:15:30"^^xsd:dateTime ;
+  ont:channel     "ATM" .
+
+# 2. 계좌 노드 선언
+data:acc_110_123 a ont:Account ; ont:bank "Shinhan" .
+data:acc_3333_88 a ont:Account ; ont:bank "Kakao" .

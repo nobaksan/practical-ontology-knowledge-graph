@@ -1,0 +1,63 @@
+# 4장 RDF·SPARQL·OWL·SHACL 실습
+실행 환경: Apple M5 · Darwin 25.5.0 · Python 3.14.6
+
+원본 트리플 64개
+
+## 1. 기본 그래프 패턴 (4.2.1 질의 그대로)
+
+[서울 공장 조립 설비] 2행
+  eq_robot01 | Robot-01 | 조립 A 라인
+  eq_robot02 | Robot-02 | 조립 B 라인
+
+## 2. 속성 경로 (4.2.2)
+
+[설비 → 라인 → 공장 → 법인 순차 경로] 3행
+  eq_press01 | HanbitCorp
+  eq_robot01 | HanbitCorp
+  eq_robot02 | HanbitCorp
+
+[센서의 모든 상위 소속 (partOf+)] 2행
+  eq_robot01
+  line_assembly_A
+
+## 3. 추론 전후 비교 (4.3.1)
+
+[추론 전: 상위 클래스 Equipment 로 찾기] 0행
+
+OWL 2 RL 물체화: 64 → 311 트리플 (+247, 52ms)
+
+[추론 후: 상위 클래스 Equipment 로 찾기] 5행
+  eq_cnc03
+  eq_press01
+  eq_press02
+  eq_robot01
+  eq_robot02
+
+[역관계: 조립 A 라인이 가진 설비 (hasEquipment 는 적재한 적 없음)] 1행
+  eq_robot01
+
+[전이성: 센서가 바로 소속된 대상 (partOf 한 단계)] 2행
+  eq_robot01
+  line_assembly_A
+
+[동등성: ERP 번호로 MES 온도 읽기] 1행
+  FA-2023-0101 | 71.4
+
+## 4. OWL 은 결함을 잡지 않는다 (4.3.3)
+공장.ttl 에는 '설비는 installedIn 을 1개 이상' 이라는 owl:minCardinality 공리가 있다.
+
+[라인이 없는 설비 (FILTER NOT EXISTS 로 직접 찾아야 보인다)] 1행
+  eq_press02
+추론기가 남긴 오류 메시지: 0건
+대조: sameAs 와 differentFrom 을 함께 선언하면 오류 4건
+  'sameAs' and 'differentFrom' cannot be used on the same subject-object pair
+
+## 5. SHACL 검증 (4.4.2 셰이프 그대로)
+
+[추론 전 원본] conforms=False · 위반 2건 · 3ms
+  eq_cnc03    installedIn  ClassConstraintComponent           value=Factory_Seoul
+  eq_press02  installedIn  MinCountConstraintComponent        value=-
+
+[OWL 추론 후] conforms=False · 위반 2건 · 2ms
+  eq_cnc03    installedIn  ClassConstraintComponent           value=Factory_Seoul
+  eq_press02  installedIn  MinCountConstraintComponent        value=-

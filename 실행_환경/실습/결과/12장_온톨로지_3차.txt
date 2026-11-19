@@ -1,0 +1,29 @@
+# 용어 19개
+- Code: A numeric or alphanumeric code representing sequential identifiers like order nu
+- Code Group: Categorical grouping codes representing business status categories such as regio
+- Code Name: A Korean language description column providing human-readable status names for o
+- Customer Master: Core customer record containing identification, classification, and geographic i
+- Equipment: Represents a physical equipment unit in the production environment.
+- Insp: Business entity represented by table insp
+- Insp Dfct: Business entity represented by table insp_dfct
+- Item Master: Core product catalog data for finished goods and raw materials
+- Lot: A production batch with its quantity and date.
+- Lot Completion: Tracks the quantity of units used to complete a lot.
+- Plant: Manufacturing facility information
+- Production Line: (설명 없음)
+- Rcv Lot: Business entity represented by table rcv_lot
+- Sales Order: A unique sales order identifier used to track individual customer orders.
+- Sales Order Detail: Line items within a sales order
+- Shipment: Tracks shipment dispatch and item quantities.
+- Vendor: Core vendor master data
+- Work Order: Tracks production activities and associated tasks linked to customer orders.
+- Workout Exercise: Tracks running activity metrics including duration and segment breakdowns.
+
+# 용어 사이 의미 경로 (홉 단위)
+Receiving Lot → Lot Component: 용어 없음
+Lot Component → Production Lot: 용어 없음
+Production Lot → Shipment: 용어 없음
+Shipment → Sales Order: Shipment -REPRESENTS-> ship | ship -CONTAINS-> so_no | so_no -SEMANTIC_FK-> Sales Order Number | Sales Order Number -PROPERTY_OF-> Sales Order
+Sales Order → Customer: 용어 없음
+Receiving Lot → Customer: 용어 없음
+Inspection → Plant: 용어 없음

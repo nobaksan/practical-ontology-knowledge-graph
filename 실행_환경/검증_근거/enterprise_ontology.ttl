@@ -1,0 +1,35 @@
+@prefix ex: <http://enterprise.org/onto#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Class Definitions
+ex:Organization a rdfs:Class ; rdfs:label "조직 및 고객사" .
+ex:Machine a rdfs:Class ; rdfs:label "생산 설비" .
+ex:WorkOrder a rdfs:Class ; rdfs:label "작업 지시" .
+ex:Order a rdfs:Class ; rdfs:label "수주" .
+ex:Factory a rdfs:Class ; rdfs:label "공장" .
+
+# Instances
+ex:ERP_CUST_101 a ex:Organization ; ex:legalName "현대자동차(주)" ; ex:taxId "101-81-00234" .
+ex:ERP_CUST_102 a ex:Organization ; ex:legalName "기아 주식회사" ; ex:taxId "202-82-11456" .
+ex:ERP_CUST_103 a ex:Organization ; ex:legalName "삼성전자(주)" ; ex:taxId "303-83-22567" .
+ex:ERP_CUST_104 a ex:Organization ; ex:legalName "LG에너지솔루션" ; ex:taxId "404-84-33678" .
+ex:ERP_CUST_105 a ex:Organization ; ex:legalName "SK온(주)" ; ex:taxId "505-85-44789" .
+ex:ERP_CUST_106 a ex:Organization ; ex:legalName "글로벌정밀기계" ; ex:taxId "606-86-55890" .
+ex:ERP_CUST_107 a ex:Organization ; ex:legalName "한국부품테크" ; ex:taxId "707-87-66901" .
+ex:WO-9021 a ex:WorkOrder ; ex:statusCode "IN_PROGRESS" ; ex:assignedTo ex:CNC-04 ; ex:orderRef ex:ORD-2026-A .
+ex:CNC-04 a ex:Machine ; ex:locatedIn ex:울산_1공장 .
+ex:ORD-2026-A a ex:Order ; ex:orderNumber "ORD-2026-A" ; ex:orderedBy ex:ERP_CUST_101 .
+ex:울산_1공장 a ex:Factory ; ex:factoryName "울산 1공장" .
+ex:WO-9022 a ex:WorkOrder ; ex:statusCode "COMPLETED" ; ex:assignedTo ex:PRESS-02 ; ex:orderRef ex:ORD-2026-B .
+ex:PRESS-02 a ex:Machine ; ex:locatedIn ex:화성_2공장 .
+ex:ORD-2026-B a ex:Order ; ex:orderNumber "ORD-2026-B" ; ex:orderedBy ex:ERP_CUST_102 .
+ex:화성_2공장 a ex:Factory ; ex:factoryName "화성 2공장" .
+ex:WO-9023 a ex:WorkOrder ; ex:statusCode "IN_PROGRESS" ; ex:assignedTo ex:LASER-01 ; ex:orderRef ex:ORD-2026-C .
+ex:LASER-01 a ex:Machine ; ex:locatedIn ex:구미_1공장 .
+ex:ORD-2026-C a ex:Order ; ex:orderNumber "ORD-2026-C" ; ex:orderedBy ex:ERP_CUST_103 .
+ex:구미_1공장 a ex:Factory ; ex:factoryName "구미 1공장" .
+ex:WO-9024 a ex:WorkOrder ; ex:statusCode "IDLE" ; ex:assignedTo ex:CNC-07 ; ex:orderRef ex:ORD-2026-D .
+ex:CNC-07 a ex:Machine ; ex:locatedIn ex:울산_1공장 .
+ex:ORD-2026-D a ex:Order ; ex:orderNumber "ORD-2026-D" ; ex:orderedBy ex:ERP_CUST_104 .

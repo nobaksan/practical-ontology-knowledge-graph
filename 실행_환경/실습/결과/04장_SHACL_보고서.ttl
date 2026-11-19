@@ -1,0 +1,28 @@
+@prefix ont: <https://company.internal/ontology/manufacturing#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+[] a sh:ValidationReport ;
+    sh:conforms false ;
+    sh:result [ a sh:ValidationResult ;
+            sh:focusNode ont:eq_press02 ;
+            sh:resultMessage "모든 설비는 정확히 1개의 유효 라인 인스턴스에 설치되어야 함" ;
+            sh:resultPath ont:installedIn ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape _:na34a220d7f3b4d4492180a3303307befb1 ],
+        [ a sh:ValidationResult ;
+            sh:focusNode ont:eq_cnc03 ;
+            sh:resultMessage "모든 설비는 정확히 1개의 유효 라인 인스턴스에 설치되어야 함" ;
+            sh:resultPath ont:installedIn ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:ClassConstraintComponent ;
+            sh:sourceShape _:na34a220d7f3b4d4492180a3303307befb1 ;
+            sh:value ont:Factory_Seoul ] .
+
+_:na34a220d7f3b4d4492180a3303307befb1 sh:class ont:Line ;
+    sh:maxCount 1 ;
+    sh:message "모든 설비는 정확히 1개의 유효 라인 인스턴스에 설치되어야 함" ;
+    sh:minCount 1 ;
+    sh:path ont:installedIn .
+

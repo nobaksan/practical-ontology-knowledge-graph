@@ -1,0 +1,25 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ont:  <https://company.internal/ontology/manufacturing#> .
+
+# 설비 인스턴스가 준수해야 할 셰이프 제약 정의
+ont:EquipmentShape a sh:NodeShape ;
+  sh:targetClass ont:Equipment ;
+  
+  # 속성 제약 1: 설치 라인 필수 및 카디널리티 강제
+  sh:property [
+    sh:path ont:installedIn ;
+    sh:class ont:Line ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "모든 설비는 정확히 1개의 유효 라인 인스턴스에 설치되어야 함" ;
+  ] ;
+  
+  # 속성 제약 2: 장비 명칭 데이터 타입 및 존재 여부 강제
+  sh:property [
+    sh:path rdfs:label ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:message "설비의 한글 표준 명칭(string) 누락 허용 불가" ;
+  ] .

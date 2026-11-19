@@ -1,0 +1,20 @@
+# schemas/objects/WorkOrder.yaml
+object_type: WorkOrder
+description: "제조 라인에서 작업자가 실행해야 할 개별 작업 지시서"
+primary_key: id (STRING)
+backing_datasource: raw_mes.work_orders_tbl
+
+properties:
+  id:
+    type: STRING
+    read_only: true
+  title:
+    type: STRING
+    read_only: true
+  status:
+    type: ENUM
+    allowed_values: [CREATED, IN_PROGRESS, COMPLETED, CANCELLED]
+  assigned_team_id:
+    type: STRING
+  priority:
+    type: INTEGER

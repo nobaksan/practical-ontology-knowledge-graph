@@ -1,0 +1,257 @@
+[
+  {
+    "question": "2026년 3월 매출 상위 3개 고객은 어디야?",
+    "seconds": 662.6,
+    "steps": [
+      {
+        "node": "question_intent",
+        "thought": null
+      },
+      {
+        "node": "question_extraction",
+        "thought": null
+      },
+      {
+        "node": "retrieve_candidates",
+        "thought": null
+      },
+      {
+        "node": "prepare_candidates",
+        "thought": "The query requires filtering sales orders by March 2026 dates and ranking customers by sales. The essential tables are `factory.erp.so_hdr` (for order dates and customer codes) and `factory.erp.cust_mst` (for customer names/identification). The other two candidates are evaluated against the two removal conditions."
+      },
+      {
+        "node": "construct_sql_from_candidates",
+        "thought": "The question asks for the top 3 customers by sales in March 2026. Looking at the available schema, there is no explicit sales amount column. The `factory.erp.so_hdr` table contains sales orders with `so_dt` (order date) and `cust_cd` (customer code), and `factory.erp.cust_mst` contains customer names (`cust_nm`) and customer codes (`cust_cd`). I am interpreting \"sales\" as the count of sales orders per customer since no revenue/amount column is available. I will filter `so_hdr` for March 2026 dates (`2026-03-01` to `2026-03-31`), join with `cust_mst` on `cust_cd` to get customer names, group by customer name, order by order count descending, and limit to top 3. Ties at position 3 will be handled by the standard LIMIT behavior."
+      },
+      {
+        "node": "validate_sql_query",
+        "thought": "The generated SQL queries the `factory.erp.so_hdr` table for orders placed in March 2026 and joins it to `factory.erp.cust_mst` on the customer code `cust_cd`. This join follows the verified foreign‑key path `erp.so_hdr.cust_cd → erp.cust_mst.cust_cd`, which is one of the authoritative join paths provided. No other tables or joins are introduced, so the join is not nonsensical or broken for the question.\n\nThe SELECT list returns the customer name (`c.cust_nm`) and counts the sales order numbers (`COUNT(s.so_no)`) as `total_sales`. The user’s original question asks for \"top 3 customers by sales in March 2026\". Because the schema contains no explicit sales‑amount column, counting orders is a reasonable and common way to represent \"sales\" for an order‑based dataset. The aggregation is therefore not clearly wrong; minor variations (e.g., using a different count or sum) are acceptable.\n\nThere are no critical issues: the join is valid, the date filter correctly captures March 2026, the grouping and ordering are appropriate, and the LIMIT 3 returns the top three customers as requested.\n\n**Conclusion**: The SQL query can reasonably answer the user's question. No serious, critical errors are present."
+      },
+      {
+        "node": "execute_sql_query",
+        "thought": null
+      },
+      {
+        "node": "check_empty_like_result",
+        "thought": null
+      },
+      {
+        "node": "check_value_repair",
+        "thought": null
+      },
+      {
+        "node": "format_and_respond",
+        "thought": null
+      }
+    ],
+    "sql_events": [
+      "SELECT c.cust_nm, COUNT(s.so_no) AS total_sales FROM factory.erp.so_hdr s JOIN factory.erp.cust_mst c ON s.cust_cd = c.cust_cd WHERE s.so_dt >= '2026-03-01' AND s.so_dt < '2026-04-01' GROUP BY c.cust_nm ORDER BY total_sales DESC LIMIT 3;"
+    ],
+    "answer": {
+      "response": "This query identifies the top 3 customers by sales volume in March 2026. It filters sales orders from the `factory.erp.so_hdr` table to the calendar month of March 2026, joins each order to its corresponding customer via the `cust_cd` foreign key in `factory.erp.cust_mst`, counts the number of orders per customer, and returns the three customers with the highest order counts, displayed with their business names.",
+      "sql_code": "SELECT c.cust_nm, COUNT(s.so_no) AS total_sales FROM factory.erp.so_hdr s JOIN factory.erp.cust_mst c ON s.cust_cd = c.cust_cd WHERE s.so_dt >= '2026-03-01' AND s.so_dt < '2026-04-01' GROUP BY c.cust_nm ORDER BY total_sales DESC LIMIT 3;",
+      "sql_columns": [
+        "04b44e2d-2f7e-4283-a7a6-71150ed86f0d",
+        "dfdfac8c-fab0-4e7f-aa77-4cac8db7d790",
+        "0273ad0a-7bef-4f95-a114-377bfb605300",
+        "6d6e34fc-ef70-4ae4-a9c3-85aaa8504820",
+        "20e6ee1b-4b9a-4267-a718-6b77347783ca"
+      ],
+      "custom_analyses_used": [],
+      "sql_response_from_db": [
+        "[{\"cust_nm\":\"\\uc138\\uc6c0\\uc790\\ub3d9\\ucc28\",\"total_sales\":14},{\"cust_nm\":\"\\ud558\\ub298\\ubc30\\ud130\\ub9ac\",\"total_sales\":11},{\"cust_nm\":\"\\ubcf4\\ub78c\\ud30c\\uc6cc\",\"total_sales\":11}]"
+      ],
+      "thoughts": "- Preparing candidates: The question asks to identify the primary column attribute representing 'top 3 customers by sales in March 2026'. Among the provided options, both columns are sales order numbers (`so_no`). The `erp.so_hdr.so_no` column is explicitly described as 'The sales order number (e.g., SO2026000001) uniquely identifies each sales order record', making it the most direct physical reference for the core concept of 'sales' in this context. The `mes.wo.so_no` column links production to customer order references, which is more production-oriented. Since the question's primary subject revolves around sales orders to determine customer rankings by sales, `erp.so_hdr.so_no` is the best match. The output requires only the column's id.\n- Preparing candidates: The query requires filtering sales orders by March 2026 dates and ranking customers by sales. The essential tables are `factory.erp.so_hdr` (for order dates and customer codes) and `factory.erp.cust_mst` (for customer names/identification). The other two candidates are evaluated against the two removal conditions.\n- Constructing SQL: The question asks for the top 3 customers by sales in March 2026. Looking at the available schema, there is no explicit sales amount column. The `factory.erp.so_hdr` table contains sales orders with `so_dt` (order date) and `cust_cd` (customer code), and `factory.erp.cust_mst` contains customer names (`cust_nm`) and customer codes (`cust_cd`). I am interpreting \"sales\" as the count of sales orders per customer since no revenue/amount column is available. I will filter `so_hdr` for March 2026 dates (`2026-03-01` to `2026-03-31`), join with `cust_mst` on `cust_cd` to get customer names, group by customer name, order by order count descending, and limit to top 3. Ties at position 3 will be handled by the standard LIMIT behavior.\n- Validating SQL and intent: The generated SQL queries the `factory.erp.so_hdr` table for orders placed in March 2026 and joins it to `factory.erp.cust_mst` on the customer code `cust_cd`. This join follows the verified foreign‑key path `erp.so_hdr.cust_cd → erp.cust_mst.cust_cd`, which is one of the authoritative join paths provided. No other tables or joins are introduced, so the join is not nonsensical or broken for the question.\n\nThe SELECT list returns the customer name (`c.cust_nm`) and counts the sales order numbers (`COUNT(s.so_no)`) as `total_sales`. The user’s original question asks for \"top 3 customers by sales in March 2026\". Because the schema contains no explicit sales‑amount column, counting orders is a reasonable and common way to represent \"sales\" for an order‑based dataset. The aggregation is therefore not clearly wrong; minor variations (e.g., using a different count or sum) are acceptable.\n\nThere are no critical issues: the join is valid, the date filter correctly captures March 2026, the grouping and ordering are appropriate, and the LIMIT 3 returns the top three customers as requested.\n\n**Conclusion**: The SQL query can reasonably answer the user's question. No serious, critical errors are present."
+    }
+  },
+  {
+    "question": "공장별 검사 불량률을 알려줘",
+    "seconds": 685.3,
+    "steps": [
+      {
+        "node": "question_intent",
+        "thought": null
+      },
+      {
+        "node": "question_extraction",
+        "thought": null
+      },
+      {
+        "node": "retrieve_candidates",
+        "thought": null
+      },
+      {
+        "node": "prepare_candidates",
+        "thought": "The question asks for the 'inspection defect rate by factory'. Mapping the analytical concepts to the provided physical column references: 'inspection' maps to `insp`, and 'defect' maps to `dfct`. The reference `qms.insp_dfct.dfct_qty` directly combines both concepts as `insp_dfct` (inspection defect), making it the primary physical reference matching the question's subject. The other reference `qms.insp.dfct_qty` only has `insp` separately. Therefore, the column attribute that best represents the primary subject is the one with physical reference `qms.insp_dfct.dfct_qty`."
+      },
+      {
+        "node": "construct_sql_from_candidates",
+        "thought": "The user asks for 'inspection defect rate by factory' (공장별 검사 불량률). The available schema has two tables in factory.qms: insp (inspection records with smpl_qty, dfct_qty) and insp_dfct (defect classification with dfct_qty, dfct_cd). There is no factory identifier column in either table. The semantic hint indicates starting from factory.qms.insp_dfct.dfct_qty, and the verified join path is insp_dfct.insp_no = insp.insp_no. Since no factory column exists for grouping, the defect rate is calculated overall as total defects divided by total sample quantity. Defect rate = SUM(dfct_qty) / SUM(smpl_qty) * 100, with REAL cast to ensure fractional result. The join is on insp_no (both are character varying, so data types match)."
+      },
+      {
+        "node": "validate_sql_query",
+        "thought": "The generated SQL uses a join condition `d.insp_no = i.insp_no` which exactly matches the verified join path from the semantic model (`factory.qms.insp_dfct.insp_no = factory.qms.insp.insp_no`). Therefore the join is not nonsensical or broken – it is fully acceptable. \n\nThe aggregation computes `CAST(SUM(d.dfct_qty) AS REAL) / SUM(i.smpl_qty) * 100`. The user asks for an \"inspection defect rate\"; the query uses a sum of defect counts divided by a sum of sample quantities, which is the natural way to calculate a rate. This is not a clearly wrong aggregation (e.g., it is not COUNT when SUM is expected). Minor variations in the exact formula are acceptable.\n\nThe provided checks only consider seriously wrong joins and clearly wrong aggregations. Missing a `GROUP BY factory` clause could be seen as an omission for the \"by factory\" aspect of the question, but according to the explicit validation criteria (join correctness and aggregation correctness) there are no critical issues. The query is syntactically valid and its core logic is reasonable.\n\nBecause there are no serious, critical problems that would prevent the query from being usable, the SQL is marked as **VALID**."
+      },
+      {
+        "node": "execute_sql_query",
+        "thought": null
+      },
+      {
+        "node": "check_empty_like_result",
+        "thought": null
+      },
+      {
+        "node": "check_value_repair",
+        "thought": null
+      },
+      {
+        "node": "format_and_respond",
+        "thought": null
+      }
+    ],
+    "sql_events": [
+      "SELECT CAST(SUM(d.dfct_qty) AS REAL) / SUM(i.smpl_qty) * 100 AS defect_rate FROM factory.qms.insp_dfct d JOIN factory.qms.insp i ON d.insp_no = i.insp_no"
+    ],
+    "answer": {
+      "response": "This calculates the overall inspection defect rate by dividing the total count of defects (SUM dfct_qty) by the total number of inspected units (SUM smpl_qty) across all records, then multiplying by 100 to express as a percentage. The rate is derived by joining the inspection defect classification table (factory.qms.insp_dfct) with the main inspection record table (factory.qms.insp) on the inspection number (insp_no). Since the available schema contains no factory identifier column for grouping, the result represents the aggregate defect rate across all inspections.",
+      "sql_code": "SELECT CAST(SUM(d.dfct_qty) AS REAL) / SUM(i.smpl_qty) * 100 AS defect_rate FROM factory.qms.insp_dfct d JOIN factory.qms.insp i ON d.insp_no = i.insp_no",
+      "sql_columns": [
+        "565fc540-71d2-4b15-9a2c-0358d354061f",
+        "2e35e06f-e399-4b42-9d87-6e7cd56e75a5",
+        "cfb09fde-526e-48ae-bda8-1bf51653e031",
+        "ce5431f9-3246-4d29-9c99-2595b74956e7"
+      ],
+      "custom_analyses_used": [],
+      "sql_response_from_db": [
+        "[{\"defect_rate\":11.958241063}]"
+      ],
+      "thoughts": "- Preparing candidates: The question asks for the 'inspection defect rate by factory'. Mapping the analytical concepts to the provided physical column references: 'inspection' maps to `insp`, and 'defect' maps to `dfct`. The reference `qms.insp_dfct.dfct_qty` directly combines both concepts as `insp_dfct` (inspection defect), making it the primary physical reference matching the question's subject. The other reference `qms.insp.dfct_qty` only has `insp` separately. Therefore, the column attribute that best represents the primary subject is the one with physical reference `qms.insp_dfct.dfct_qty`.\n- Constructing SQL: The user asks for 'inspection defect rate by factory' (공장별 검사 불량률). The available schema has two tables in factory.qms: insp (inspection records with smpl_qty, dfct_qty) and insp_dfct (defect classification with dfct_qty, dfct_cd). There is no factory identifier column in either table. The semantic hint indicates starting from factory.qms.insp_dfct.dfct_qty, and the verified join path is insp_dfct.insp_no = insp.insp_no. Since no factory column exists for grouping, the defect rate is calculated overall as total defects divided by total sample quantity. Defect rate = SUM(dfct_qty) / SUM(smpl_qty) * 100, with REAL cast to ensure fractional result. The join is on insp_no (both are character varying, so data types match).\n- Validating SQL and intent: The generated SQL uses a join condition `d.insp_no = i.insp_no` which exactly matches the verified join path from the semantic model (`factory.qms.insp_dfct.insp_no = factory.qms.insp.insp_no`). Therefore the join is not nonsensical or broken – it is fully acceptable. \n\nThe aggregation computes `CAST(SUM(d.dfct_qty) AS REAL) / SUM(i.smpl_qty) * 100`. The user asks for an \"inspection defect rate\"; the query uses a sum of defect counts divided by a sum of sample quantities, which is the natural way to calculate a rate. This is not a clearly wrong aggregation (e.g., it is not COUNT when SUM is expected). Minor variations in the exact formula are acceptable.\n\nThe provided checks only consider seriously wrong joins and clearly wrong aggregations. Missing a `GROUP BY factory` clause could be seen as an omission for the \"by factory\" aspect of the question, but according to the explicit validation criteria (join correctness and aggregation correctness) there are no critical issues. The query is syntactically valid and its core logic is reasonable.\n\nBecause there are no serious, critical problems that would prevent the query from being usable, the SQL is marked as **VALID**."
+    }
+  },
+  {
+    "question": "입고 로트 RL-2026-0102가 들어간 제품을 출하받은 고객은 어디야?",
+    "seconds": 1306.9,
+    "steps": [
+      {
+        "node": "question_intent",
+        "thought": null
+      },
+      {
+        "node": "question_extraction",
+        "thought": null
+      },
+      {
+        "node": "retrieve_candidates",
+        "thought": null
+      },
+      {
+        "node": "prepare_candidates",
+        "thought": "The question asks to find customers who received products with lot RL-2026-0102. The core subject is a receiving lot identifier matching that structured batch number format. Among the two provided column attributes, the second one (id: ca6dd730-b0f5-418c-9c6f-0fc9a7190aa1) has a physical column reference of mes.lot_comp.rcv_lot_no, and its description explicitly states it uses a character varying format with structured batch numbers like RL-2026-0125 to track individual shipments or material lots. This directly matches the lot format RL-2026-0102 referenced in the question. The first column (qms.rcv_lot.rcv_lot_no) lacks a matching description. Therefore, the best-representing column attribute id is ca6dd730-b0f5-418c-9c6f-0fc9a7190aa1."
+      },
+      {
+        "node": "construct_sql_from_candidates",
+        "thought": null
+      },
+      {
+        "node": "unconstructable_sql_response",
+        "thought": null
+      },
+      {
+        "node": "question_intent",
+        "thought": null
+      },
+      {
+        "node": "question_extraction",
+        "thought": null
+      },
+      {
+        "node": "retrieve_candidates",
+        "thought": null
+      },
+      {
+        "node": "prepare_candidates",
+        "thought": "The question asks to find customers who received products with incoming lot RL-2026-0102. The core analytical subject is the receiving/incoming lot identifier. Both provided columns are `rcv_lot_no` (receiving lot number), but the second column `mes.lot_comp.rcv_lot_no` (id: ca6dd730-b0f5-418c-9c6f-0fc9a7190aa1) has a description that explicitly references the structured batch number format `RL-2026-0125`, directly matching the `RL-2026-0102` pattern in the question. This makes it the strongest evidence-based match to the primary subject."
+      },
+      {
+        "node": "construct_sql_from_candidates",
+        "thought": null
+      },
+      {
+        "node": "unconstructable_sql_response",
+        "thought": null
+      }
+    ],
+    "sql_events": [],
+    "answer": {
+      "response": "LLM failed to produce a response.",
+      "sql_code": "",
+      "sql_columns": [],
+      "custom_analyses_used": [],
+      "sql_response_from_db": null,
+      "thoughts": "- Preparing candidates: The question asks to find customers who received products with incoming lot RL-2026-0102. The core analytical subject is the receiving/incoming lot identifier. Both provided columns are `rcv_lot_no` (receiving lot number), but the second column `mes.lot_comp.rcv_lot_no` (id: ca6dd730-b0f5-418c-9c6f-0fc9a7190aa1) has a description that explicitly references the structured batch number format `RL-2026-0125`, directly matching the `RL-2026-0102` pattern in the question. This makes it the strongest evidence-based match to the primary subject."
+    }
+  },
+  {
+    "question": "2026년 3월 공장별 탄소 배출량은 얼마야?",
+    "seconds": 1635.8,
+    "steps": [
+      {
+        "node": "question_intent",
+        "thought": null
+      },
+      {
+        "node": "question_extraction",
+        "thought": null
+      },
+      {
+        "node": "retrieve_candidates",
+        "thought": null
+      },
+      {
+        "node": "prepare_candidates",
+        "thought": "The question asks for carbon emissions by factory in March 2026. None of the candidate tables contain carbon emission data, but some may be needed to filter or qualify rows (e.g., by factory via the plant table, or by the explicit March 2026 date filter). After examining each table's columns and their relevance to the answer's row qualification, only one table is clearly extraneous to the required SQL logic."
+      },
+      {
+        "node": "construct_sql_from_candidates",
+        "thought": null
+      },
+      {
+        "node": "unconstructable_sql_response",
+        "thought": null
+      },
+      {
+        "node": "question_intent",
+        "thought": null
+      },
+      {
+        "node": "question_extraction",
+        "thought": null
+      },
+      {
+        "node": "retrieve_candidates",
+        "thought": null
+      },
+      {
+        "node": "prepare_candidates",
+        "thought": "The question asks for carbon emission by factory in March 2026. None of the four tables contain a carbon emission column, but row-qualification rules require keeping tables that help restrict which rows qualify (e.g., date filters, factory grouping, join chains). I evaluated each table against both removal checks: (a) no needed column in the answer, and (b) removing it wouldn't alter the set of qualifying rows. Only `factory.qms.insp_dfct` satisfies both confidently; the others are retained due to potential date-filtering needs (`rcv_lot.rcv_dt`), factory-identification/join chains (`plant` and `line` linked via `plant_cd`, and the 'by factory' context)."
+      },
+      {
+        "node": "construct_sql_from_candidates",
+        "thought": null
+      },
+      {
+        "node": "unconstructable_sql_response",
+        "thought": null
+      }
+    ],
+    "sql_events": [],
+    "answer": {
+      "response": "LLM failed to produce a response.",
+      "sql_code": "",
+      "sql_columns": [],
+      "custom_analyses_used": [],
+      "sql_response_from_db": null,
+      "thoughts": "- Preparing candidates: The question asks for carbon emissions grouped by factory in March 2026. Among the provided column attributes, only `mes.plant.plant_nm` relates to factory/plant identification (examples: 울산 1공장, 화성 2공장, 구미 1공장). The other column `qms.rcv_lot.rcv_lot_no` pertains to receiving lot numbers and has no direct relevance to factory grouping or emissions. Since the task requires mapping the primary conceptual focus ('by factory') to the listed physical schema columns, `plant_nm` is the sole matching attribute. Its associated ID is `6bdf9d1e-7199-4a1e-bcd6-e278387534c6`.\n- Preparing candidates: The question asks for carbon emission by factory in March 2026. None of the four tables contain a carbon emission column, but row-qualification rules require keeping tables that help restrict which rows qualify (e.g., date filters, factory grouping, join chains). I evaluated each table against both removal checks: (a) no needed column in the answer, and (b) removing it wouldn't alter the set of qualifying rows. Only `factory.qms.insp_dfct` satisfies both confidently; the others are retained due to potential date-filtering needs (`rcv_lot.rcv_dt`), factory-identification/join chains (`plant` and `line` linked via `plant_cd`, and the 'by factory' context)."
+    }
+  }
+]

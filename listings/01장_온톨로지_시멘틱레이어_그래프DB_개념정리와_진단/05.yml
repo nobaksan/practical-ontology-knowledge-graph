@@ -1,0 +1,23 @@
+# 전사 의미 계층 진단 결과 기록서 (표준 템플릿)
+diagnosis_metadata:
+  date: "2026-11-08"
+  organization: "전사 데이터 플랫폼 본부"
+  total_questions_collected: 32
+
+metrics_assessment:
+  hits: 21
+  severity: HIGH
+  primary_symptom: "부서별 활성 사용자(MAU) 및 매출 집계식 상이, 주간 회의 지연"
+  lead_owner: "데이터 분석팀 / BI 엔지니어링팀"
+
+relationship_assessment:
+  hits: 4
+  max_hops_observed: 2
+  severity: LOW
+  primary_symptom: "일부 마케팅 캠페인과 쿠폰 간의 단순 2단계 조인 질의"
+  lead_owner: "데이터 플랫폼 아키텍처팀"
+
+verdict:
+  decision: "시맨틱 레이어 최우선 단독 구축 (온톨로지 도입 보류)"
+  rationale: "지표 불일치 고통이 압도적이며, 관계 질문은 2홉 이하로 기존 SQL 조인으로 처리 가능함"
+  re_evaluation_schedule: "2027년 1분기 재평가"
