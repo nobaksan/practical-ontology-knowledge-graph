@@ -32,11 +32,11 @@ def generate_datasets(output_dir):
 
     # 2. CRM 원천: 영업 계정 및 거래처 (표기 차이 및 중복 존재)
     crm_accounts = [
-        {"crm_id": "CRM_ACC_8801", "tax_id": "1018100234", "account_name": "현대자동차 울산공장", "rep_name": "정의선", "city": "울산"},
-        {"crm_id": "CRM_ACC_8802", "tax_id": "2028211456", "account_name": "기아자동차 화성공장", "rep_name": "송호성", "city": "화성"},
-        {"crm_id": "CRM_ACC_8803", "tax_id": "3038322567", "account_name": "(주)삼성전자 반도체", "rep_name": "경계현", "city": "수원"},
-        {"crm_id": "CRM_ACC_8804", "tax_id": "4048433678", "account_name": "LG엔솔 오창", "rep_name": "김동명", "city": "청주"},
-        {"crm_id": "CRM_ACC_8805", "tax_id": "5058544789", "account_name": "에스케이온", "rep_name": "이석희", "city": "서울"},
+        {"crm_id": "CRM_ACC_8801", "tax_id": "1018100234", "account_name": "현대자동차 울산공장", "rep_name": "김도윤", "city": "울산"},
+        {"crm_id": "CRM_ACC_8802", "tax_id": "2028211456", "account_name": "기아자동차 화성공장", "rep_name": "이서준", "city": "화성"},
+        {"crm_id": "CRM_ACC_8803", "tax_id": "3038322567", "account_name": "(주)삼성전자 반도체", "rep_name": "박하은", "city": "수원"},
+        {"crm_id": "CRM_ACC_8804", "tax_id": "4048433678", "account_name": "LG엔솔 오창", "rep_name": "최지호", "city": "청주"},
+        {"crm_id": "CRM_ACC_8805", "tax_id": "5058544789", "account_name": "에스케이온", "rep_name": "정예린", "city": "서울"},
         {"crm_id": "CRM_ACC_8806", "tax_id": "999-99-99999", "account_name": "현대자동차 남양연구소", "rep_name": "김연구", "city": "화성"},  # 모호 구간 (HITL 대상)
         {"crm_id": "CRM_ACC_8807", "tax_id": "888-88-88888", "account_name": "동양모빌리티", "rep_name": "박동양", "city": "부산"},  # 독립 분리 대상
     ]
